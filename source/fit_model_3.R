@@ -6,6 +6,11 @@ library(abind)
 
 
 wie_edgelist_200 <- readRDS("results/edgelist_200_by_timeframe.RDS")
+
+# Ovaj model uključuje sve efekte kao i prvi model, uz dve binarne varijable:
+# da li događaj/poruka govori o skupu i da li je događaj pozitivan i govori o skupu
+# funkcije koje prave varijable su date ispod
+
 is_organizer_200 <- readRDS("results/is_organizer_cov.RData")
 has_topics <- readRDS("results/has_topics.RData")
 wie_sentiment_positive <- readRDS("results/wie_sentiment_positive_updated.RDS")
@@ -36,8 +41,10 @@ make_single_topics_positive_covar <- function(edgelist, n_participants, has_topi
         ar
 }
 
+# fitovani model
 fit_struct_topics <- readRDS("results/fit_struct_topics.RDS")
 
+# funkcija koja fituje model. Izvršavanje funkcije je trajalo oko 6.24 časova, sa do 10Gb RAM memorije
 # fit_struct_topics <- list()
 # fit_struct_topics <- lapply(wie_edgelist_200,
 #                   function(x)(rem.dyad(x[,1:3], 200,
@@ -45,7 +52,7 @@ fit_struct_topics <- readRDS("results/fit_struct_topics.RDS")
 #                                                    "RRecSnd", "RSndSnd",
 #                                                    "OTPSnd", "ITPSnd", "OSPSnd", "ISPSnd",
 #                                                    "CovInt", "CovEvent"),
-#                                        covar = list(CovInt = is_organizer_200$covar, 
+#                                        covar = list(CovInt = is_organizer_200$covar,
 #                                                     CovEvent = abind(make_single_topics_covar(x, 200, has_topics),
 #                                                                      make_single_topics_positive_covar(x, 200, has_topics, wie_sentiment_positive),
 #                                                                      along = 2)),

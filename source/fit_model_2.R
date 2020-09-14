@@ -6,9 +6,14 @@ library(abind)
 
 
 wie_edgelist_200 <- readRDS("results/edgelist_200_by_timeframe.RDS")
+
+# Drugi model pored svih efekata uključenih u prvi model, uključuje dve dodatne binarne varijable:
+# da li događaj govori o posmatranom skupu i da li događaj pozitivno govori o posmatranom skupu
+# funkcije koje prave array su ispod.
+
 is_organizer_200 <- readRDS("results/is_organizer_cov.RData")
-is_conf <- reaRDS("results/is_conf.RData")
-wie_sentiment_positive <- readRDS("results/conf_tweets_sentiments_updated.RData")
+is_conf <- readRDS("results/is_conf.RData")
+wie_sentiment_positive <- readRDS("results/wie_sentiment_positive_updated.RDS")
 
 
 ########## binarna varijabla koja govori o tome da li dogadjaj govori o skupu
@@ -34,8 +39,10 @@ make_single_confpositive_covar <- function(edgelist, n_participants, is_conf, co
         ar
 }
 
+# fitovani model
 fit_struct_conf <- readRDS("results/fit_struct_conf.RDS")
 
+# funkcija koja fituje model. Izvršavanje funkcije je trajalo 7.26 časova, sa do 10Gb zauzete RAM memorije
 # fit_struct_conf <- list()
 # fit_struct_conf <- lapply(wie_edgelist_200,
 #                             function(x)(rem.dyad(x[,1:3], 200,
@@ -43,13 +50,13 @@ fit_struct_conf <- readRDS("results/fit_struct_conf.RDS")
 #                                                              "RRecSnd", "RSndSnd",
 #                                                              "OTPSnd", "ITPSnd", "OSPSnd", "ISPSnd",
 #                                                              "CovInt", "CovEvent"),
-#                                                  covar = list(CovInt = is_organizer_200$covar, 
+#                                                  covar = list(CovInt = is_organizer_200$covar,
 #                                                               CovEvent = abind(make_singleconf_covar(x, 200, is_conf),
 #                                                                                make_single_confpositive_covar(x, 200, is_conf, wie_sentiment_positive),
 #                                                                                along = 2)),
 #                                                  hessian = TRUE)))
 # 
-# saveRDS(fit_struct_conf, "fit_struct_conf.RDS")
+# # saveRDS(fit_struct_conf, "fit_struct_conf.RDS")
 
 
 summary(fit_struct_conf$time_1)
